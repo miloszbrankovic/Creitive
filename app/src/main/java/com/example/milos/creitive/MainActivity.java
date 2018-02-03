@@ -1,5 +1,7 @@
 package com.example.milos.creitive;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,30 +38,37 @@ public class MainActivity extends AppCompatActivity {
         mEditTextPassword = (EditText) findViewById(R.id.editTextPassword);
         mButtonLogin = (Button) findViewById(R.id.buttonLogin);
 
+        //SharedPreferenceUtils.saveValue(getApplicationContext(), "testVariable", "no token");
+        if (tokenFromMemory()){
+            Log.e(TAG, "------load second activity from staring point: " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
+            loadSecondActivity();
+        } else {
+            Log.e(TAG, "-----no token we do not load second activity: "  + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
+        }
+
+
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = String.valueOf(mEditTextMail.getText());
                 String password = String.valueOf(mEditTextPassword.getText());
 
-                Log.d(TAG, "email value - " + email + " password vale = " + password);
+                Log.d(TAG, "email value - " + email + " password value = " + password);
 
                 if (!validateEmailAdress(email)) {
-                    Log.e("MILOS", "mail adress is not walid");
+                    Log.e(TAG, "mail adress is not walid");
                     Toast.makeText(getApplicationContext(), "Mail adress is not in valid format.", Toast.LENGTH_LONG).show();
                 }
                 if (!validatePassword(password)) {
-                    Log.e("MILOS", "you should enter at least 6 characters");
+                    Log.e(TAG, "you should enter at least 6 characters");
                     Toast.makeText(getApplicationContext(), "password is too short,it needs to be at least 6 characters.", Toast.LENGTH_LONG).show();
                 }
 
                 //if user manage to login
                 if (validateEmailAdress(email) && validatePassword(password)){
-
-                    Log.e(TAG, "username and password are OK so we can now go and login to wabpage");
+                    //Log.e(TAG, "username and password are OK so we can now go and login to wabpage");
                     loggingIn(email, password);
-                    //Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
-                    //startActivity(intent);
+
                 }
 
             }
@@ -106,12 +115,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "onResponse: ServerResponse: " + response.toString());
 
                 if (response.isSuccessful()){
-
-                    Log.e(TAG, "onResponse: USPESNO LOGOVANJE!!!!");
+                    Log.e(TAG, "onResponse: SUCCESSFUL  LOGGING!!!!");
                     Token token = response.body();
                     Log.e(TAG, "onResponse: token                       value: " + token);
                     Log.e(TAG, "onResponse: token.getToken()            value: " + token.getToken());
                     Log.e(TAG, "onResponse: token.getToken().toString() value: " + token.getToken().toString());
+
+                    SharedPreferenceUtils.saveValue(getApplicationContext(), "testVariable", token.getToken());
+                    loadSecondActivity();
                 } else {
                     if (response.code() == StatusCodes.BAD_REQUEST){
                         Log.e(TAG, "onResponse: BAD_REQUEST ");
@@ -127,6 +138,34 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Some problem occurs:", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /**
+     *
+     *
+     */
+    public void loadSecondActivity(){
+//        Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+//        startActivity(intent);
+        Log.e(TAG, "loadSecondActivity() " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "default value"));
+    }
+
+
+    /*
+     *
+     * If returns true: token exists in memory and he is saved
+     * If returns false: token do not exists in memory there are no saved token value in memory
+     */
+    public boolean tokenFromMemory(){
+        if (SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token").equals("no token")){
+            Log.e(TAG, "tokenFromMemory() message: there are no token in memory: "
+                    + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
+            return false;
+        }else {
+            Log.e(TAG, "tokenFromMemory() message: token saved in memory: "
+                    + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
+            return true;
+        }
     }
 
 
