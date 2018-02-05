@@ -1,7 +1,6 @@
 package com.example.milos.creitive;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
+import com.example.milos.creitive.models.Token;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mEditTextPassword = (EditText) findViewById(R.id.editTextPassword);
         mButtonLogin = (Button) findViewById(R.id.buttonLogin);
 
-        //SharedPreferenceUtils.saveValue(getApplicationContext(), "testVariable", "no token");
+        SharedPreferenceUtils.saveValue(getApplicationContext(), "testVariable", "no token");
         if (tokenFromMemory()){
             Log.e(TAG, "------load second activity from staring point: " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
             loadSecondActivity();
@@ -145,9 +146,10 @@ public class MainActivity extends AppCompatActivity {
      *
      */
     public void loadSecondActivity(){
-//        Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
-//        startActivity(intent);
         Log.e(TAG, "loadSecondActivity() " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "default value"));
+        Intent intent = new Intent(getApplicationContext(), BlogListActivity.class);
+        startActivity(intent);
+
     }
 
 

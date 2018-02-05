@@ -1,4 +1,4 @@
-package com.example.milos.creitive;
+package com.example.milos.creitive.models;
 
 /**
  * Created by milos on 03/02/2018.
