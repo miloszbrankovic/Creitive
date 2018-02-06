@@ -2,8 +2,11 @@ package com.example.milos.creitive;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.milos.creitive.adapters.MyBlogListViewAdapter;
 import com.example.milos.creitive.models.Blog;
 
 import java.util.ArrayList;
@@ -19,6 +22,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BlogListActivity extends AppCompatActivity {
 
     private static final String TAG = BlogListActivity.class.getSimpleName();
+
+    private RecyclerView mPostRecyclerView;
+    private MyBlogListViewAdapter myBlogListViewAdapter;
+    private List<Blog> mPostCollection;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +46,7 @@ public class BlogListActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CreitiveAPI creitiveAPI = retrofit.create(CreitiveAPI.class);
-        Call<List<Blog>> call = creitiveAPI.getBlog(headerMap);
+        Call<List<Blog>> call = creitiveAPI.getBlogs(headerMap);
         final ArrayList<Blog> blogLists = new ArrayList<Blog>();
         call.enqueue(new Callback<List<Blog>>() {
             @Override
@@ -60,6 +68,12 @@ public class BlogListActivity extends AppCompatActivity {
                                     + " \ndescription: " + blogLists.get(i).getDescription()
                                     + "\n----------------------------------------------------------" );
                         }
+
+                        //ArrayList<Blog> blogs = null;
+                        //blogs = (ArrayList<Blog>) response.body();
+                        //myAdapter = new MyAdapter(blogs, BlogListActivity.this);
+                        blogsInListView(blogLists);
+
                     }
 
                 } else {
@@ -73,5 +87,19 @@ public class BlogListActivity extends AppCompatActivity {
                 Log.e(TAG, "onFailure" + t.toString());
             }
         });
+    }
+
+    /*
+    method for populating list view
+     */
+    private void blogsInListView(ArrayList<Blog> blogLists) {
+
+        mPostRecyclerView = (RecyclerView) findViewById(R.id.listView);
+        mPostRecyclerView.setLayoutManager(new LinearLayoutManager(BlogListActivity.this));
+        mPostRecyclerView.setHasFixedSize(true);
+        mPostCollection = new ArrayList<>();
+
+        myBlogListViewAdapter = new MyBlogListViewAdapter(blogLists, BlogListActivity.this, getApplicationContext());
+        mPostRecyclerView.setAdapter(myBlogListViewAdapter);
     }
 }

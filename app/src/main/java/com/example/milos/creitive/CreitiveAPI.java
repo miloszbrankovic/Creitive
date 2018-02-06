@@ -20,7 +20,6 @@ import retrofit2.http.POST;
 public interface CreitiveAPI {
 
 
-
     @POST(ServerConfiguration.LOGIN)
     Call<Token> login(
             @HeaderMap Map<String, String> headers,
@@ -28,11 +27,8 @@ public interface CreitiveAPI {
     );
 
     @GET(ServerConfiguration.BLOGS)
-    Call<List<Blog>> getBlog(
+    Call<List<Blog>> getBlogs(
             @HeaderMap Map<String, String> headers
     );
-
-
-
 
 }

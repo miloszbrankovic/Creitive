@@ -4,5 +4,8 @@
     <string name="button_login">Login</string>
     <string name="editText_insert_mail">Email</string>
     <string name="editText_insert_password">Password</string>
+    <string name="textView_id">id</string>
+    <string name="textView_title">title</string>
+    <string name="textView_description">description</string>
 
 </resources>
