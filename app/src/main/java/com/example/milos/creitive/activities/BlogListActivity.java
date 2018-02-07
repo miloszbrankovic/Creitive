@@ -1,4 +1,4 @@
-package com.example.milos.creitive;
+package com.example.milos.creitive.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.milos.creitive.CreitiveAPI;
+import com.example.milos.creitive.R;
+import com.example.milos.creitive.ServerConfiguration;
+import com.example.milos.creitive.utils.SharedPreferenceUtils;
 import com.example.milos.creitive.adapters.MyBlogListViewAdapter;
 import com.example.milos.creitive.models.Blog;
 

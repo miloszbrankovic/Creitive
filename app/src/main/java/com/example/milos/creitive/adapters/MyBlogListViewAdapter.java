@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 
 
 import com.example.milos.creitive.R;
+import com.example.milos.creitive.utils.HtmlUtils;
+import com.example.milos.creitive.utils.SharedPreferenceUtils;
+import com.example.milos.creitive.activities.SingleBlogActivity;
 import com.example.milos.creitive.models.Blog;
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +28,8 @@ import java.util.ArrayList;
  */
 
 public class MyBlogListViewAdapter extends RecyclerView.Adapter<MyBlogListViewAdapter.PostHolder> {
+
+    public static final String TAG = MyBlogListViewAdapter.class.getSimpleName();
 
     private ArrayList<Blog> mData;
     private Activity mActivity;
@@ -46,10 +52,21 @@ public class MyBlogListViewAdapter extends RecyclerView.Adapter<MyBlogListViewAd
         final Blog blog = mData.get(position);
 
         holder.mTextViewTitle.setText(blog.getTitle());
-        holder.mTextViewDescription.setText(blog.getDescription());
+        //holder.mTextViewDescription.setText(blog.getDescription());
+        holder.mTextViewDescription.setText(HtmlUtils.stripHtml(blog.getDescription()));
         Picasso.with(mActivity)
                 .load(blog.getImage_url())
                 .into(holder.mImageView);
+        holder.mLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //SharedPreferenceUtils.saveIntValue(mContext, "url_id", -1);
+                SharedPreferenceUtils.saveLongValue(mContext, "url_id", (int) blog.getId());
+                Intent mSingleBlogActivity = new Intent(mContext, SingleBlogActivity.class);
+                mContext.startActivity(mSingleBlogActivity);
+            }
+        });
     }
 
     @Override

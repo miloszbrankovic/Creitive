@@ -6,7 +6,7 @@ package com.example.milos.creitive.models;
 
 public class Blog {
 
-    private long id;
+    private Long id;
 
     private String title;
 

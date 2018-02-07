@@ -7,5 +7,10 @@
     <string name="textView_id">id</string>
     <string name="textView_title">title</string>
     <string name="textView_description">description</string>
+    <string name="textView_single_blog_date">date</string>
+    <string name="textView_single_blog_title">title</string>
+    <string name="textView_single_blog_author">author</string>
+    <string name="textView_single_blog_body">body</string>
+
 
 </resources>

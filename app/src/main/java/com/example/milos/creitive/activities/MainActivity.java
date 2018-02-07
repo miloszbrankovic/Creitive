@@ -1,4 +1,4 @@
-package com.example.milos.creitive;
+package com.example.milos.creitive.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.example.milos.creitive.CreitiveAPI;
+import com.example.milos.creitive.R;
+import com.example.milos.creitive.ServerConfiguration;
+import com.example.milos.creitive.utils.SharedPreferenceUtils;
+import com.example.milos.creitive.StatusCodes;
 import com.example.milos.creitive.models.Token;
 
 import java.util.HashMap;
@@ -39,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mEditTextPassword = (EditText) findViewById(R.id.editTextPassword);
         mButtonLogin = (Button) findViewById(R.id.buttonLogin);
 
-        SharedPreferenceUtils.saveValue(getApplicationContext(), "testVariable", "no token");
+        //SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", "no token");
         if (tokenFromMemory()){
             Log.e(TAG, "------load second activity from staring point: " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
             loadSecondActivity();
@@ -122,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "onResponse: token.getToken()            value: " + token.getToken());
                     Log.e(TAG, "onResponse: token.getToken().toString() value: " + token.getToken().toString());
 
-                    SharedPreferenceUtils.saveValue(getApplicationContext(), "testVariable", token.getToken());
+                    SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", token.getToken());
                     loadSecondActivity();
                 } else {
                     if (response.code() == StatusCodes.BAD_REQUEST){
@@ -149,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "loadSecondActivity() " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "default value"));
         Intent intent = new Intent(getApplicationContext(), BlogListActivity.class);
         startActivity(intent);
-
     }
 
 

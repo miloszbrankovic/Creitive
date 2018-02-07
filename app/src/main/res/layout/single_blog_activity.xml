@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/linearLayoutSingleBlog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+
+            android:layout_marginTop="11dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewPublishedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/textView_single_blog_date"
+
+                android:paddingTop="30dp"
+                android:textSize="18sp"
+                android:paddingRight="3dp"
+                />
+
+
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textView_single_blog_title"
+
+            android:layout_below="@+id/linearLayoutSingleBlog"
+
+            android:textColor="@android:color/background_dark"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="1dp"/>
+
+
+        <TextView
+            android:id="@+id/textViewAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textView_single_blog_author"
+
+            android:layout_below="@+id/textViewTitle"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="30dp"/>
+
+        <TextView
+            android:id="@+id/textViewSingleBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textView_single_blog_body"
+
+            android:layout_below="@+id/textViewAuthor"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"/>
+
+
+    </RelativeLayout>
+
+</ScrollView>

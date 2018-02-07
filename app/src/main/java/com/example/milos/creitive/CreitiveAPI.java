@@ -1,6 +1,7 @@
 package com.example.milos.creitive;
 
 import com.example.milos.creitive.models.Blog;
+import com.example.milos.creitive.models.Content;
 import com.example.milos.creitive.models.Token;
 
 import java.util.HashMap;
@@ -12,6 +13,9 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
+
+import static android.R.attr.id;
 
 /**
  * Created by milos on 03/02/2018.
@@ -29,6 +33,12 @@ public interface CreitiveAPI {
     @GET(ServerConfiguration.BLOGS)
     Call<List<Blog>> getBlogs(
             @HeaderMap Map<String, String> headers
+    );
+
+    @GET
+    Call<Content> getBlog(
+            @HeaderMap Map<String, String> headers,
+            @Url String url
     );
 
 }
