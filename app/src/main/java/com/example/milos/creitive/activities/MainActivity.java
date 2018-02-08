@@ -47,7 +47,7 @@ import static com.example.milos.creitive.dialogs.SimpleDialogBox.dialogBoxMeWarn
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    boolean isConnected;
+    private boolean isConnected;
 
 
     private EditText mEditTextMail;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", "no token");
+        //SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", "no token");
         if (tokenFromMemory()){
             Log.e(TAG, "------load second activity from staring point: " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
             loadSecondActivity();

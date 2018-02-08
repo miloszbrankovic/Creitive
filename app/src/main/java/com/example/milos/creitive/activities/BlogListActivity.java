@@ -1,5 +1,9 @@
 package com.example.milos.creitive.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +13,8 @@ import android.util.Log;
 import com.example.milos.creitive.CreitiveAPI;
 import com.example.milos.creitive.R;
 import com.example.milos.creitive.ServerConfiguration;
+import com.example.milos.creitive.dialogs.SimpleDialogBox;
+import com.example.milos.creitive.receivers.InternetBroadcastReceiver;
 import com.example.milos.creitive.utils.SharedPreferenceUtils;
 import com.example.milos.creitive.adapters.MyBlogListViewAdapter;
 import com.example.milos.creitive.models.Blog;
@@ -31,6 +37,9 @@ public class BlogListActivity extends AppCompatActivity {
     private MyBlogListViewAdapter myBlogListViewAdapter;
     private List<Blog> mPostCollection;
 
+    private String dialogBoxMessageText = "To load content you need to enable internet!";
+
+    BroadcastReceiver broadcastReceiver;
 
 
     @Override
@@ -39,7 +48,10 @@ public class BlogListActivity extends AppCompatActivity {
         setContentView(R.layout.blog_list_activity);
 
 
-        loadBlogPosts();
+
+        checkInternetConnection();
+
+
 
     }
 
@@ -110,6 +122,22 @@ public class BlogListActivity extends AppCompatActivity {
         mPostRecyclerView.setAdapter(myBlogListViewAdapter);
     }
 
+
+
+    private void checkInternetConnection(){
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (InternetBroadcastReceiver.checkInternetConnection(context) == true){
+                    loadBlogPosts();
+                }else {
+                    SimpleDialogBox.dialogBoxMeWarning(BlogListActivity.this, dialogBoxMessageText);
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
 
 
 }

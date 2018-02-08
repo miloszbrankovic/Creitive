@@ -1,5 +1,9 @@
 package com.example.milos.creitive.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -11,6 +15,8 @@ import com.example.milos.creitive.CreitiveAPI;
 import com.example.milos.creitive.R;
 import com.example.milos.creitive.ServerConfiguration;
 
+import com.example.milos.creitive.dialogs.SimpleDialogBox;
+import com.example.milos.creitive.receivers.InternetBroadcastReceiver;
 import com.example.milos.creitive.utils.SharedPreferenceUtils;
 import com.example.milos.creitive.models.Content;
 
@@ -44,6 +50,8 @@ public class SingleBlogActivity extends AppCompatActivity {
     TextView mTextViewAuthor;
     TextView mTextViewBody;
 
+    private BroadcastReceiver broadcastReceiver;
+    private String dialogBoxMessageText = "To load content you need to enable internet!";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +68,8 @@ public class SingleBlogActivity extends AppCompatActivity {
         mTextViewAuthor.setText("");
         mTextViewBody.setText("");
 
-        url_id = SharedPreferenceUtils.getLongValue(SingleBlogActivity.this, "url_id", -1);
-        //Log.e(TAG, "id number is:  " + url_id);
-        if (url_id != -1) loadBlogContent(url_id);
+        checkInternetConnection();
+
     }
 
     private void loadBlogContent(long id) {
@@ -128,5 +135,24 @@ public class SingleBlogActivity extends AppCompatActivity {
         String s = document.html();
         s = s.replace("&nbsp;", " ");
         return Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
+    }
+
+
+
+    private void checkInternetConnection(){
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (InternetBroadcastReceiver.checkInternetConnection(context) == true){
+                    url_id = SharedPreferenceUtils.getLongValue(SingleBlogActivity.this, "url_id", -1);
+                    //Log.e(TAG, "id number is:  " + url_id);
+                    if (url_id != -1) loadBlogContent(url_id);
+                }else {
+                    SimpleDialogBox.dialogBoxMeWarning(SingleBlogActivity.this, dialogBoxMessageText);
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 }
