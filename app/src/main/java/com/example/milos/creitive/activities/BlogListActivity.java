@@ -32,12 +32,15 @@ public class BlogListActivity extends AppCompatActivity {
     private List<Blog> mPostCollection;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.blog_list_activity);
 
+
         loadBlogPosts();
+
     }
 
     public void loadBlogPosts(){
@@ -106,4 +109,7 @@ public class BlogListActivity extends AppCompatActivity {
         myBlogListViewAdapter = new MyBlogListViewAdapter(blogLists, BlogListActivity.this, getApplicationContext());
         mPostRecyclerView.setAdapter(myBlogListViewAdapter);
     }
+
+
+
 }

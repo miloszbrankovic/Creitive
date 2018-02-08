@@ -1,6 +1,17 @@
 package com.example.milos.creitive.activities;
 
+
+import android.content.BroadcastReceiver;
+
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+
+
+import android.content.res.Resources;
+import android.support.annotation.StringDef;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +24,13 @@ import android.widget.Toast;
 import com.example.milos.creitive.CreitiveAPI;
 import com.example.milos.creitive.R;
 import com.example.milos.creitive.ServerConfiguration;
+import com.example.milos.creitive.receivers.InternetBroadcastReceiver;
 import com.example.milos.creitive.utils.SharedPreferenceUtils;
 import com.example.milos.creitive.StatusCodes;
 import com.example.milos.creitive.models.Token;
 
 import java.util.HashMap;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,14 +40,26 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.milos.creitive.dialogs.SimpleDialogBox.dialogBoxMeWarning;
+
+
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    boolean isConnected;
+
 
     private EditText mEditTextMail;
     private EditText mEditTextPassword;
     private Button mButtonLogin;
 
+    private String dialogBoxMessageText = "To login you need to enable internet!";
+    private String dialogBoxButtonText = "Ok";
+
+
+
+    private BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +69,15 @@ public class MainActivity extends AppCompatActivity {
         mEditTextPassword = (EditText) findViewById(R.id.editTextPassword);
         mButtonLogin = (Button) findViewById(R.id.buttonLogin);
 
-        //SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", "no token");
+
+
+        SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", "no token");
         if (tokenFromMemory()){
             Log.e(TAG, "------load second activity from staring point: " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
             loadSecondActivity();
         } else {
             Log.e(TAG, "-----no token we do not load second activity: "  + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "no token"));
+            checkInternetConnection();
         }
 
 
@@ -61,25 +89,62 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "email value - " + email + " password value = " + password);
 
-                if (!validateEmailAdress(email)) {
-                    Log.e(TAG, "mail adress is not walid");
-                    Toast.makeText(getApplicationContext(), "Mail adress is not in valid format.", Toast.LENGTH_LONG).show();
-                }
-                if (!validatePassword(password)) {
-                    Log.e(TAG, "you should enter at least 6 characters");
-                    Toast.makeText(getApplicationContext(), "password is too short,it needs to be at least 6 characters.", Toast.LENGTH_LONG).show();
-                }
+                isConnected = InternetBroadcastReceiver.amIConnected(getApplicationContext());
 
-                //if user manage to login
-                if (validateEmailAdress(email) && validatePassword(password)){
-                    //Log.e(TAG, "username and password are OK so we can now go and login to wabpage");
-                    loggingIn(email, password);
-
+                if (isConnected){
+                    if (!validateEmailAdress(email)) {
+                        Log.e(TAG, "mail adress is not walid");
+                        Toast.makeText(getApplicationContext(), "Mail adress is not in valid format.", Toast.LENGTH_LONG).show();
+                        mEditTextMail.requestFocus();
+                    }
+                    if (!validatePassword(password)) {
+                        Log.e(TAG, "you should enter at least 6 characters");
+                        Toast.makeText(getApplicationContext(), "password is too short, it needs to be at least 6 characters.", Toast.LENGTH_LONG).show();
+                        mEditTextPassword.requestFocus();
+                    }
+                    //if user manage to login
+                    if (validateEmailAdress(email) && validatePassword(password)){
+                        loggingIn(email, password);
+                    }
+                }else {
+                    dialogBoxMeWarning(MainActivity.this, dialogBoxMessageText);
                 }
-
             }
         });
     }
+
+
+
+    private void checkInternetConnection(){
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (InternetBroadcastReceiver.checkInternetConnection(context) == true){
+                    isConnected = true;
+                }else {
+                    isConnected = false;
+                    dialogBoxMeWarning(MainActivity.this, dialogBoxMessageText);
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public boolean validateEmailAdress(String email){
         String emailPattern = "^[+A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -173,6 +238,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
+
+
+
+
+
+
+
+
+
 
 
 }

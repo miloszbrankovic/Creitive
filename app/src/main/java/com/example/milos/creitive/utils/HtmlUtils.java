@@ -10,7 +10,7 @@ import android.text.Spanned;
 public class HtmlUtils {
 
     @SuppressWarnings("deprecation")
-    public static String stripHtml(String html) {
+    public static String removeHtml(String html) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             return String.valueOf(Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY));
         } else {

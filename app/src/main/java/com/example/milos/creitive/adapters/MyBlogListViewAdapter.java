@@ -53,7 +53,7 @@ public class MyBlogListViewAdapter extends RecyclerView.Adapter<MyBlogListViewAd
 
         holder.mTextViewTitle.setText(blog.getTitle());
         //holder.mTextViewDescription.setText(blog.getDescription());
-        holder.mTextViewDescription.setText(HtmlUtils.stripHtml(blog.getDescription()));
+        holder.mTextViewDescription.setText(HtmlUtils.removeHtml(blog.getDescription()));
         Picasso.with(mActivity)
                 .load(blog.getImage_url())
                 .into(holder.mImageView);
