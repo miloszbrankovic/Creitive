@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 public class SimpleDialogBox {
 
     public static void dialogBoxMeWarning(Context context, String message){
-        //AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message);
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

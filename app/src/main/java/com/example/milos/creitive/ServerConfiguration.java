@@ -5,7 +5,6 @@ package com.example.milos.creitive;
  */
 
 public class ServerConfiguration {
-    //public static final String SERVER_URL = "http://blogsdemo.creitiveapps.com/login/";
     public static final String SERVER_URL = "http://blogsdemo.creitiveapps.com/";
     public static final String HOST = "blogsdemo.creitiveapps.com";
     public static final String LOGIN = "login";

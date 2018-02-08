@@ -1,7 +1,6 @@
 package com.example.milos.creitive.utils;
 
 import android.text.Html;
-import android.text.Spanned;
 
 /**
  * Created by milos on 06/02/2018.

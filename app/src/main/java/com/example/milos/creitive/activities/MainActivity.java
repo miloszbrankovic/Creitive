@@ -49,17 +49,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private boolean isConnected;
 
-
     private EditText mEditTextMail;
     private EditText mEditTextPassword;
     private Button mButtonLogin;
 
     private String dialogBoxMessageText = "To login you need to enable internet!";
-    private String dialogBoxButtonText = "Ok";
-
-
-
     private BroadcastReceiver broadcastReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
         mEditTextMail = (EditText) findViewById(R.id.editTextMail);
         mEditTextPassword = (EditText) findViewById(R.id.editTextPassword);
         mButtonLogin = (Button) findViewById(R.id.buttonLogin);
-
-
 
         //SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", "no token");
         if (tokenFromMemory()){
@@ -80,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             checkInternetConnection();
         }
 
-
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "email value - " + email + " password value = " + password);
 
-                isConnected = InternetBroadcastReceiver.amIConnected(getApplicationContext());
+                isConnected = InternetBroadcastReceiver.checkInternetConnection(MainActivity.this);
 
                 if (isConnected){
                     if (!validateEmailAdress(email)) {
@@ -112,38 +105,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-    private void checkInternetConnection(){
-        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (InternetBroadcastReceiver.checkInternetConnection(context) == true){
-                    isConnected = true;
-                }else {
-                    isConnected = false;
-                    dialogBoxMeWarning(MainActivity.this, dialogBoxMessageText);
-                }
-            }
-        };
-        registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public boolean validateEmailAdress(String email){
@@ -188,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     Log.e(TAG, "onResponse: SUCCESSFUL  LOGGING!!!!");
                     Token token = response.body();
-                    Log.e(TAG, "onResponse: token                       value: " + token);
-                    Log.e(TAG, "onResponse: token.getToken()            value: " + token.getToken());
                     Log.e(TAG, "onResponse: token.getToken().toString() value: " + token.getToken().toString());
 
                     SharedPreferenceUtils.saveStringValue(getApplicationContext(), "testVariable", token.getToken());
@@ -211,19 +170,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     *
-     *
-     */
     public void loadSecondActivity(){
         Log.e(TAG, "loadSecondActivity() " + SharedPreferenceUtils.getStringValue(getApplicationContext(), "testVariable", "default value"));
         Intent intent = new Intent(getApplicationContext(), BlogListActivity.class);
         startActivity(intent);
     }
 
-
     /*
-     *
      * If returns true: token exists in memory and he is saved
      * If returns false: token do not exists in memory there are no saved token value in memory
      */
@@ -239,14 +192,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
+    private void checkInternetConnection(){
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (InternetBroadcastReceiver.checkInternetConnection(context) == true){
+                    isConnected = true;
+                }else {
+                    isConnected = false;
+                    dialogBoxMeWarning(MainActivity.this, dialogBoxMessageText);
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
 }

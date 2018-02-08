@@ -3,7 +3,6 @@ package com.example.milos.creitive.adapters;
 import android.app.Activity;
 import android.content.Context;
 
-
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import com.example.milos.creitive.R;
 import com.example.milos.creitive.utils.HtmlUtils;
@@ -52,7 +50,6 @@ public class MyBlogListViewAdapter extends RecyclerView.Adapter<MyBlogListViewAd
         final Blog blog = mData.get(position);
 
         holder.mTextViewTitle.setText(blog.getTitle());
-        //holder.mTextViewDescription.setText(blog.getDescription());
         holder.mTextViewDescription.setText(HtmlUtils.removeHtml(blog.getDescription()));
         Picasso.with(mActivity)
                 .load(blog.getImage_url())
@@ -76,8 +73,6 @@ public class MyBlogListViewAdapter extends RecyclerView.Adapter<MyBlogListViewAd
         }
         return mData.size();
     }
-
-
 
 
     public class PostHolder extends RecyclerView.ViewHolder{

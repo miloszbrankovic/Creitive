@@ -35,24 +35,16 @@ public class BlogListActivity extends AppCompatActivity {
 
     private RecyclerView mPostRecyclerView;
     private MyBlogListViewAdapter myBlogListViewAdapter;
-    private List<Blog> mPostCollection;
 
     private String dialogBoxMessageText = "To load content you need to enable internet!";
-
-    BroadcastReceiver broadcastReceiver;
-
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.blog_list_activity);
 
-
-
         checkInternetConnection();
-
-
-
     }
 
     public void loadBlogPosts(){
@@ -88,11 +80,7 @@ public class BlogListActivity extends AppCompatActivity {
                                     + "\n----------------------------------------------------------" );
                         }
 
-                        //ArrayList<Blog> blogs = null;
-                        //blogs = (ArrayList<Blog>) response.body();
-                        //myAdapter = new MyAdapter(blogs, BlogListActivity.this);
                         blogsInListView(blogLists);
-
                     }
 
                 } else {
@@ -116,12 +104,10 @@ public class BlogListActivity extends AppCompatActivity {
         mPostRecyclerView = (RecyclerView) findViewById(R.id.listView);
         mPostRecyclerView.setLayoutManager(new LinearLayoutManager(BlogListActivity.this));
         mPostRecyclerView.setHasFixedSize(true);
-        mPostCollection = new ArrayList<>();
 
         myBlogListViewAdapter = new MyBlogListViewAdapter(blogLists, BlogListActivity.this, getApplicationContext());
         mPostRecyclerView.setAdapter(myBlogListViewAdapter);
     }
-
 
 
     private void checkInternetConnection(){

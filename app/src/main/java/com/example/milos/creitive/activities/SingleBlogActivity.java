@@ -129,15 +129,13 @@ public class SingleBlogActivity extends AppCompatActivity {
     public static String escapingCharacters(String html) {
         if(html==null) return html;
         Document document = Jsoup.parse(html);
-        document.outputSettings(new Document.OutputSettings().prettyPrint(false));//makes html() preserve linebreaks and spacing
+        document.outputSettings(new Document.OutputSettings().prettyPrint(false));
         //document.select("br").append("\n");
         document.select("p").prepend("\n");
         String s = document.html();
         s = s.replace("&nbsp;", " ");
         return Jsoup.clean(s, "", Whitelist.none(), new Document.OutputSettings().prettyPrint(false));
     }
-
-
 
     private void checkInternetConnection(){
         IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
